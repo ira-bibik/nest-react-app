@@ -23,9 +23,4 @@ export class UserController {
     findAll() {
         return this.userService.findAll();
     }
-
-    // @Get()
-    // findOne() {
-    //     return this.userService.findOne();
-    // }
 }

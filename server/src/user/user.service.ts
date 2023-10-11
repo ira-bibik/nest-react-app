@@ -5,12 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as argon2 from 'argon2';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User)
-        private readonly userRepository: Repository<User>
+        private readonly userRepository: Repository<User>,
+        private readonly jwtService: JwtService
     ) {}
 
     async create(createUserDto: CreateUserDto) {
@@ -19,11 +21,13 @@ export class UserService {
         });
         if (existUser)
             throw new BadRequestException('This email already exist');
-        const newUser = await this.userRepository.save({
+        const user = await this.userRepository.save({
             email: createUserDto.email,
             password: await argon2.hash(createUserDto.password),
         });
-        return { newUser };
+
+        const token = this.jwtService.sign({ email: createUserDto.email });
+        return { user, token };
     }
 
     async findAll() {
@@ -31,11 +35,7 @@ export class UserService {
         return { users };
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} user`;
-    }
-
-    update(id: number, updateUserDto: UpdateUserDto) {
-        return `This action updates a #${id} user`;
+    async findOne(email: string) {
+        return await this.userRepository.findOne({ where: { email } });
     }
 }
