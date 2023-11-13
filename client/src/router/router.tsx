@@ -3,7 +3,7 @@ import Layout from '../pages/Layout';
 import ErrorPage from '../pages/ErrorPage';
 import Home from '../pages/Home';
 import Transactions from '../pages/Transactions';
-import Categoties from '../pages/Categoties';
+import Categories, { categoriesActions, categoryLoader } from '../pages/Categories';
 import Auth from '../pages/Auth';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 
@@ -27,9 +27,11 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: 'categories',
+				action: categoriesActions,
+				loader: categoryLoader,
 				element: (
 					<ProtectedRoute>
-						<Categoties />
+						<Categories />
 					</ProtectedRoute>
 				),
 			},
