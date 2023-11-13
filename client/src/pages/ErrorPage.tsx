@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import img from '../assets/page-404-error.png';
+import img from '../assets/page-404-error.jpg';
 import { Link } from 'react-router-dom';
 
 const ErrorPage: FC = () => {
